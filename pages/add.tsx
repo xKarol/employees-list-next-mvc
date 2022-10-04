@@ -1,6 +1,8 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { SubmitHandler, useForm } from "react-hook-form";
+import * as yup from "yup";
 
 type Inputs = {
   firstName: string;
@@ -12,8 +14,35 @@ type Inputs = {
   phone: string;
 };
 
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
+const employeeSchema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  email: yup.string().email().required(),
+  pesel: yup
+    .number()
+    .test(
+      "len",
+      "Pesel number must be exactly 11 characters",
+      (val) => val?.toString()?.length === 11,
+    ),
+  zipCode: yup.string().required(),
+  city: yup.string().required(),
+  phone: yup.string().matches(phoneRegExp, "Phone number is not valid").required(),
+});
+
 const Add: NextPage = () => {
-  const { register, handleSubmit } = useForm<Inputs>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: yupResolver(employeeSchema),
+  });
+
+  console.log("err", errors);
 
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 

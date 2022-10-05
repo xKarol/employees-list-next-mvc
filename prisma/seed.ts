@@ -14,7 +14,7 @@ const seed = async () => {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
-      pesel: `${faker.datatype.number({ min: 10000000000, max: 90000000000 })}`,
+      pesel: faker.datatype.number({ min: 10000000000, max: 90000000000 }),
       zipCode: faker.address.zipCode(),
       city: faker.address.cityName(),
       phone: faker.phone.number(),

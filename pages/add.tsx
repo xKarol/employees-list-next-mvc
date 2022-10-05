@@ -6,15 +6,7 @@ import { useCallback } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-type Inputs = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  pesel: string;
-  zipCode: string;
-  city: string;
-  phone: string;
-};
+import type { EmployeeType } from "../@types";
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -40,13 +32,13 @@ const Add: NextPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<EmployeeType>({
     resolver: yupResolver(employeeSchema),
   });
 
   console.log("err", errors);
 
-  const createEmployee = useCallback(async (data: Inputs) => {
+  const createEmployee = useCallback(async (data: EmployeeType) => {
     return await axios("http://localhost:3000/api/employees/3", {
       method: "POST",
       headers: {
@@ -56,7 +48,7 @@ const Add: NextPage = () => {
     });
   }, []);
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<EmployeeType> = async (data) => {
     try {
       await createEmployee(data);
       console.log(data);

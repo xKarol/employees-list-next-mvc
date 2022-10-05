@@ -3,7 +3,17 @@ const prisma = new PrismaClient();
 
 const seed = async () => {
   console.log("Seeding...");
-  prisma.user.create({ data: { email: "test@gmail.com" } });
+  prisma.employee.create({
+    data: {
+      firstName: "firstName",
+      lastName: "lastName",
+      email: "email",
+      pesel: "pesel",
+      zipCode: "zipcode",
+      city: "city",
+      phone: "phone",
+    },
+  });
 };
 
 seed();

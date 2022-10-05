@@ -1,6 +1,8 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useCallback } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 
@@ -44,7 +46,24 @@ const Add: NextPage = () => {
 
   console.log("err", errors);
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const createEmployee = useCallback(async (data: Inputs) => {
+    return await axios("http://localhost:3000/api/employees/3", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(data),
+    });
+  }, []);
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      await createEmployee(data);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>

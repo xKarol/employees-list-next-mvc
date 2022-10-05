@@ -7,13 +7,6 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
   try {
     const { method, query } = req;
     const id = query.employeeId as string;
-    if (method === "POST") {
-      const { body } = req;
-      const employees = await prisma.employee.create({
-        data: body,
-      });
-      return res.status(200).json(employees);
-    }
     if (method === "GET") {
       if (!id) throw new Error("No employee id provided.");
       const employees = await prisma.employee.findUnique({

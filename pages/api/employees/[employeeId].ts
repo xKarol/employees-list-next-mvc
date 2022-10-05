@@ -23,6 +23,16 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       });
       return res.status(200).json(employees);
     }
+    if (method === "DELETE") {
+      const { query } = req;
+      if (!query.employeeId) throw new Error("No employee id provided.");
+      const employees = await prisma.employee.delete({
+        where: {
+          id: query.employeeId as string,
+        },
+      });
+      return res.status(200).json(employees);
+    }
     throw new Error();
   } catch (error) {
     console.log(error);

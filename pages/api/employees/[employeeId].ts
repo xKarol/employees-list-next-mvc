@@ -5,7 +5,8 @@ const prisma = new PrismaClient();
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { method } = req;
+    const { method, query } = req;
+    const id = query.employeeId as string;
     if (method === "POST") {
       const { body } = req;
       const employees = await prisma.employee.create({
@@ -14,21 +15,19 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       return res.status(200).json(employees);
     }
     if (method === "GET") {
-      const { query } = req;
-      if (!query.employeeId) throw new Error("No employee id provided.");
+      if (!id) throw new Error("No employee id provided.");
       const employees = await prisma.employee.findUnique({
         where: {
-          id: query.employeeId as string,
+          id: id,
         },
       });
       return res.status(200).json(employees);
     }
     if (method === "DELETE") {
-      const { query } = req;
-      if (!query.employeeId) throw new Error("No employee id provided.");
+      if (!id) throw new Error("No employee id provided.");
       const employees = await prisma.employee.delete({
         where: {
-          id: query.employeeId as string,
+          id: id,
         },
       });
       return res.status(200).json(employees);

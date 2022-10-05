@@ -1,7 +1,40 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useMemo } from "react";
+import { useTable } from "react-table";
 
 const Home: NextPage = () => {
+  const data = [
+    {
+      id: 1,
+      firstName: "test",
+      lastName: "lastName",
+      email: "email",
+      pesel: "pesel",
+      zipCode: "zipcode",
+      city: "city",
+      phone: "phone",
+    },
+  ];
+
+  const columns = useMemo(
+    () => [
+      { Header: "First Name", accessor: "firstName" },
+      { Header: "Last Name", accessor: "lastName" },
+      { Header: "Email", accessor: "email" },
+      { Header: "Pesel", accessor: "pesel" },
+      { Header: "Zip Code", accessor: "zipCode" },
+      { Header: "City", accessor: "city" },
+      { Header: "Phone Number", accessor: "phone" },
+    ],
+    [],
+  );
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
+    columns: columns as any, //TODO fix ts error
+    data,
+  });
+
   return (
     <>
       <Head>
@@ -10,7 +43,37 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Hello world</h1>
+      <h1>Employees List</h1>
+
+      <table {...getTableProps()}>
+        <thead>
+          {headerGroups.map((headerGroup, index) => (
+            <tr {...headerGroup.getHeaderGroupProps()} key={index}>
+              {headerGroup.headers.map((column, index) => (
+                <th {...column.getHeaderProps()} key={index}>
+                  {column.render("Header")}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row, index) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()} key={index}>
+                {row.cells.map((cell, index) => {
+                  return (
+                    <td {...cell.getCellProps()} key={index}>
+                      {cell.render("Cell")}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </>
   );
 };

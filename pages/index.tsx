@@ -1,21 +1,24 @@
+import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTable } from "react-table";
 
 const Home: NextPage = () => {
-  const data = [
-    {
-      id: 1,
-      firstName: "test",
-      lastName: "lastName",
-      email: "email",
-      pesel: "pesel",
-      zipCode: "zipcode",
-      city: "city",
-      phone: "phone",
-    },
-  ];
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    const getEmployees = async () => {
+      const { data } = await axios("http://localhost:3000/api/employees");
+      console.log(data);
+      setEmployees(data as any);
+    };
+    getEmployees();
+  }, []);
+
+  console.log(employees);
+
+  const data = useMemo(() => employees, [employees]);
 
   const columns = useMemo(
     () => [
@@ -32,7 +35,7 @@ const Home: NextPage = () => {
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
     columns: columns as any, //TODO fix ts error
-    data,
+    data: data,
   });
 
   return (

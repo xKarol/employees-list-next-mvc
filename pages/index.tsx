@@ -1,21 +1,21 @@
-import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 import { useTable } from "react-table";
 
 import type { EmployeeType } from "../@types";
+import { getEmployees } from "../services";
 
 const Home: NextPage = () => {
   const [employees, setEmployees] = useState([] as EmployeeType[]);
 
   useEffect(() => {
-    const getEmployees = async () => {
-      const { data } = await axios("http://localhost:3000/api/employees");
+    const getData = async () => {
+      const data = await getEmployees();
       console.log(data);
       setEmployees(data);
     };
-    getEmployees();
+    getData();
   }, []);
 
   console.log(employees);

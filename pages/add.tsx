@@ -1,12 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useCallback } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 
 import type { EmployeeType } from "../@types";
+import { createEmployee } from "../services";
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -37,16 +36,6 @@ const Add: NextPage = () => {
   });
 
   console.log("err", errors);
-
-  const createEmployee = useCallback(async (data: EmployeeType) => {
-    return await axios("http://localhost:3000/api/employees/3", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: JSON.stringify(data),
-    });
-  }, []);
 
   const onSubmit: SubmitHandler<EmployeeType> = async (data) => {
     try {

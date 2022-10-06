@@ -1,26 +1,15 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useQuery } from "react-query";
 import { useTable } from "react-table";
 
 import type { EmployeeType } from "../@types";
 import { getEmployees } from "../services";
 
 const Home: NextPage = () => {
-  const [employees, setEmployees] = useState([] as EmployeeType[]);
-
-  useEffect(() => {
-    const getData = async () => {
-      const data = await getEmployees();
-      console.log(data);
-      setEmployees(data);
-    };
-    getData();
-  }, []);
-
-  console.log(employees);
-
-  const data = useMemo(() => employees, [employees]);
+  const { data, isLoading, isError } = useQuery<EmployeeType[]>("get-employees", getEmployees);
+  console.log(data, isLoading, isError);
 
   const columns = useMemo(
     () => [
@@ -37,7 +26,7 @@ const Home: NextPage = () => {
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
     columns: columns as any, //TODO fix ts error
-    data: data,
+    data: data || [],
   });
 
   return (

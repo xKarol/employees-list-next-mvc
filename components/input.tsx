@@ -1,3 +1,4 @@
+import { clsx } from "clsx";
 import React, { forwardRef } from "react";
 
 type Props = { label: string; error?: string } & React.ComponentPropsWithoutRef<"input">;
@@ -7,9 +8,10 @@ const Input = forwardRef<HTMLDivElement, Props>(({ label, type = "text", error, 
   return (
     <div ref={ref}>
       <label
-        className={`block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300 ${
-          isError ? "text-red-500" : ""
-        } `}>
+        className={clsx(
+          "block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300",
+          isError && "text-red-500",
+        )}>
         {label}
         {isError ? <span className="ml-2">- {error}</span> : null}
       </label>

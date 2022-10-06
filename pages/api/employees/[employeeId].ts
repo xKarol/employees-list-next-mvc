@@ -1,33 +1,11 @@
-import { PrismaClient } from "@prisma/client";
-import { NextApiRequest, NextApiResponse } from "next";
+import nc from "next-connect";
 
-const prisma = new PrismaClient();
+import { deleteEmployee, getEmployee } from "../../../controllers/employee-controller";
+import onError from "../../../middlewares/errors";
 
-export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-  try {
-    const { method, query } = req;
-    const id = query.employeeId as string;
-    if (method === "GET") {
-      if (!id) throw new Error("No employee id provided.");
-      const employees = await prisma.employee.findUnique({
-        where: {
-          id: id,
-        },
-      });
-      return res.status(200).json(employees);
-    }
-    if (method === "DELETE") {
-      if (!id) throw new Error("No employee id provided.");
-      const employees = await prisma.employee.delete({
-        where: {
-          id: id,
-        },
-      });
-      return res.status(200).json(employees);
-    }
-    throw new Error();
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ error: "Error" });
-  }
-}
+const handler = nc({ onError });
+
+handler.delete(deleteEmployee);
+handler.get(getEmployee);
+
+export default handler;

@@ -1,25 +1,11 @@
-import { PrismaClient } from "@prisma/client";
-import { NextApiRequest, NextApiResponse } from "next";
+import nc from "next-connect";
 
-const prisma = new PrismaClient();
+import { createEmployee, getEmployees } from "../../../controllers/employee-controller";
+import onError from "../../../middlewares/errors";
 
-export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-  try {
-    const { method } = req;
-    if (method === "GET") {
-      const employees = await prisma.employee.findMany();
-      return res.status(200).json(employees);
-    }
-    if (method === "POST") {
-      const { body } = req;
-      const employees = await prisma.employee.create({
-        data: body,
-      });
-      return res.status(200).json(employees);
-    }
-    throw new Error();
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ error: "Error" });
-  }
-}
+const handler = nc({ onError });
+
+handler.get(getEmployees);
+handler.post(createEmployee);
+
+export default handler;

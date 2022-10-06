@@ -2,6 +2,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useMutation } from "react-query";
+import { ClipLoader } from "react-spinners";
 import * as yup from "yup";
 
 import type { EmployeeType } from "../@types";
@@ -34,12 +36,13 @@ const Add: NextPage = () => {
   } = useForm<EmployeeType>({
     resolver: yupResolver(employeeSchema),
   });
+  const { mutate, isLoading, isError } = useMutation(createEmployee);
 
   console.log("err", errors);
 
-  const onSubmit: SubmitHandler<EmployeeType> = async (data) => {
+  const onSubmit: SubmitHandler<EmployeeType> = (data) => {
     try {
-      await createEmployee(data);
+      mutate(data);
       console.log(data);
     } catch (err) {
       console.log(err);
@@ -55,6 +58,7 @@ const Add: NextPage = () => {
       </Head>
 
       <h1>Add new employee</h1>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <input type="text" {...register("firstName")} placeholder="first name" />
         <input type="text" {...register("lastName")} placeholder="last name" />
@@ -65,6 +69,9 @@ const Add: NextPage = () => {
         <input type="text" {...register("phone")} placeholder="phone number" />
         <button type="submit">Add</button>
       </form>
+
+      <ClipLoader loading={isLoading} />
+      {isError ? <span>Error</span> : null}
     </>
   );
 };

@@ -15,10 +15,13 @@ const EmployeeFormContainer = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<EmployeeType>({
     resolver: yupResolver(employeeSchema),
   });
-  const { mutate, isLoading, isError, error } = useMutation(createEmployee);
+  const { mutate, isLoading, isError, error } = useMutation(createEmployee, {
+    onSuccess: () => reset(),
+  });
 
   const onSubmit: SubmitHandler<EmployeeType> = (data) => mutate(data);
 

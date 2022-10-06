@@ -2,10 +2,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { ClipLoader } from "react-spinners";
 
 import type { EmployeeType } from "../../../@types";
 import Input from "../../../components/input";
+import LoadingButton from "../../../components/loading-button";
 import { createEmployee } from "../../../services";
 import { employeeSchema } from "../schemas";
 
@@ -43,12 +43,12 @@ const EmployeeFormContainer = () => {
           <Input label="City" {...register("city")} />
         </div>
 
-        <button
+        <LoadingButton
           type="submit"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          isLoading={isLoading}>
           Submit
-        </button>
-        <ClipLoader loading={isLoading} />
+        </LoadingButton>
         {isError ? <span>Error</span> : null}
       </form>
     </>

@@ -32,26 +32,32 @@ const EmployeeTableContainer = () => {
     <>
       <BeatLoader loading={isLoading} />
 
-      <table {...getTableProps()}>
+      <table {...getTableProps()} className="border-collapse table-fixed w-full text-sm">
         <thead>
           {headerGroups.map((headerGroup, index) => (
             <tr {...headerGroup.getHeaderGroupProps()} key={index}>
               {headerGroup.headers.map((column, index) => (
-                <th {...column.getHeaderProps()} key={index}>
+                <th
+                  {...column.getHeaderProps()}
+                  key={index}
+                  className="border-b font-medium p-4 pl-8 pt-0 pb-3 text-blue-400 text-left">
                   {column.render("Header")}
                 </th>
               ))}
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody {...getTableBodyProps()} className="bg-white dark:bg-slate-800">
           {rows.map((row, index) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()} key={index}>
                 {row.cells.map((cell, index) => {
                   return (
-                    <td {...cell.getCellProps()} key={index}>
+                    <td
+                      {...cell.getCellProps()}
+                      key={index}
+                      className="border-b border-slate-100 p-4 pl-8 text-slate-500 ">
                       {cell.render("Cell")}
                     </td>
                   );

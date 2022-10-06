@@ -20,8 +20,6 @@ const EmployeeFormContainer = () => {
   });
   const { mutate, isLoading, isError, error } = useMutation(createEmployee);
 
-  console.log("err", errors);
-
   const onSubmit: SubmitHandler<EmployeeType> = (data) => {
     try {
       mutate(data);
@@ -34,13 +32,13 @@ const EmployeeFormContainer = () => {
   return (
     <EmployeeForm onSubmit={handleSubmit(onSubmit)} error={isError ? (error as Error).message : ""}>
       <div className="grid gap-6 mb-6 md:grid-cols-2">
-        <Input label="First name" {...register("firstName")} />
-        <Input label="Last name" {...register("lastName")} />
-        <Input label="Email" {...register("email")} />
-        <Input label="Phone Number" {...register("phone")} />
-        <Input label="Pesel Number" {...register("pesel")} />
-        <Input label="ZIP Code" {...register("zipCode")} />
-        <Input label="City" {...register("city")} />
+        <Input label="First name" error={errors?.firstName?.message} {...register("firstName")} />
+        <Input label="Last name" error={errors?.lastName?.message} {...register("lastName")} />
+        <Input label="Email" error={errors?.email?.message} {...register("email")} />
+        <Input label="Phone Number" error={errors?.phone?.message} {...register("phone")} />
+        <Input label="Pesel Number" error={errors?.pesel?.message} {...register("pesel")} />
+        <Input label="ZIP Code" error={errors?.zipCode?.message} {...register("zipCode")} />
+        <Input label="City" error={errors?.city?.message} {...register("city")} />
       </div>
 
       <LoadingButton

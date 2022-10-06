@@ -1,12 +1,17 @@
 import React, { forwardRef } from "react";
 
-type Props = { label: string } & React.ComponentPropsWithoutRef<"input">;
+type Props = { label: string; error?: string } & React.ComponentPropsWithoutRef<"input">;
 
-const Input = forwardRef<HTMLDivElement, Props>(({ label, type = "text", ...rest }, ref) => {
+const Input = forwardRef<HTMLDivElement, Props>(({ label, type = "text", error, ...rest }, ref) => {
+  const isError = error?.length;
   return (
     <div ref={ref}>
-      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+      <label
+        className={`block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300 ${
+          isError ? "text-red-500" : ""
+        } `}>
         {label}
+        {isError ? <span className="ml-2">- {error}</span> : null}
       </label>
       <input
         {...rest}

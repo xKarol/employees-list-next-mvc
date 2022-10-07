@@ -1,21 +1,13 @@
 import clsx from "clsx";
 import { useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
-import { useInfiniteQuery } from "react-query";
 import { BeatLoader } from "react-spinners";
 import { useTable } from "react-table";
 
-import type { EmployeeType } from "../@types";
-import { getEmployees } from "../services";
+import { useEmployeeTableData } from "../hooks";
 
 const EmployeeTableContainer = () => {
-  const { data, isLoading, isError, fetchNextPage, hasNextPage } = useInfiniteQuery<{
-    data: EmployeeType;
-    nextPage: number;
-  }>("get-employees", ({ pageParam: page }) => getEmployees({ page }), {
-    getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
-  });
-
+  const { data, isLoading, isError, fetchNextPage, hasNextPage } = useEmployeeTableData();
   const { ref, inView } = useInView({ threshold: 0 });
 
   useEffect(() => {

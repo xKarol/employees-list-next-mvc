@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 
-import { EmployeeTableContainer } from "../features/employee-table";
+import { EmployeeTableContainer } from "../containers";
 
 const Home: NextPage = () => {
   return (

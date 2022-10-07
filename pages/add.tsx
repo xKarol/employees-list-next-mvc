@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 
-import { EmployeeFormContainer } from "../features/employee";
+import { EmployeeAddFormContainer } from "../containers";
 
 const Add: NextPage = () => {
   return (
@@ -14,7 +14,7 @@ const Add: NextPage = () => {
 
       <h1>Add new employee</h1>
 
-      <EmployeeFormContainer />
+      <EmployeeAddFormContainer />
     </>
   );
 };

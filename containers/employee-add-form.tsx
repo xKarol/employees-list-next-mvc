@@ -3,12 +3,10 @@ import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 
-import type { EmployeeType } from "../../../@types";
-import Input from "../../../components/input";
-import LoadingButton from "../../../components/loading-button";
-import { createEmployee } from "../../../services";
-import { EmployeeForm } from "../components";
+import type { EmployeeType } from "../@types";
+import { EmployeeForm, Input, LoadingButton } from "../components";
 import { employeeSchema } from "../schemas";
+import { createEmployee } from "../services";
 
 const EmployeeFormContainer = () => {
   const {

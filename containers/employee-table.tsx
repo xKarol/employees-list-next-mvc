@@ -6,21 +6,20 @@ import { BeatLoader } from "react-spinners";
 import { useEmployeeTable, useEmployeeTableData } from "../hooks";
 
 const EmployeeTableContainer = () => {
-  const { data, isLoading, isError, fetchNextPage, hasNextPage } = useEmployeeTableData();
+  const { data, isLoading, isFetchingNextPage, isError, error, fetchNextPage, hasNextPage } =
+    useEmployeeTableData();
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useEmployeeTable(
     data?.pages.map(({ data }) => data).flat(1),
   );
   const { ref, inView } = useInView({ threshold: 0 });
+  const showLoader = (hasNextPage || isLoading) && !isError;
 
   useEffect(() => {
     if (inView) fetchNextPage();
   }, [inView, fetchNextPage]);
 
-  console.log(isError);
-
   return (
     <div className="relative">
-      <BeatLoader loading={isLoading} className="absolute top-20 left-1/2 -translate-x-1/2" />
       <div className={clsx(isLoading && "opacity-25")}>
         <table {...getTableProps()} className="border-collapse table-fixed w-full text-sm">
           <thead>
@@ -57,8 +56,15 @@ const EmployeeTableContainer = () => {
             })}
           </tbody>
         </table>
-        <div ref={ref}>{hasNextPage ? "Load more..." : null}</div>
       </div>
+      {showLoader || isError ? (
+        <div ref={ref} className="flex flex-col py-10 items-center">
+          {showLoader ? <BeatLoader loading={isLoading || isFetchingNextPage} /> : null}
+          {isError ? (
+            <span className="text-sm text-red-500">{(error as Error).message}</span>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 };

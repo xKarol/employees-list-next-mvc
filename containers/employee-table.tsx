@@ -1,13 +1,15 @@
 import clsx from "clsx";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { BeatLoader } from "react-spinners";
-import { useTable } from "react-table";
 
-import { useEmployeeTableData } from "../hooks";
+import { useEmployeeTable, useEmployeeTableData } from "../hooks";
 
 const EmployeeTableContainer = () => {
   const { data, isLoading, isError, fetchNextPage, hasNextPage } = useEmployeeTableData();
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useEmployeeTable(
+    data?.pages.map(({ data }) => data).flat(1),
+  );
   const { ref, inView } = useInView({ threshold: 0 });
 
   useEffect(() => {
@@ -15,24 +17,6 @@ const EmployeeTableContainer = () => {
   }, [inView, fetchNextPage]);
 
   console.log(isError);
-
-  const columns = useMemo(
-    () => [
-      { Header: "First Name", accessor: "firstName" },
-      { Header: "Last Name", accessor: "lastName" },
-      { Header: "Email", accessor: "email" },
-      { Header: "Pesel", accessor: "pesel" },
-      { Header: "Zip Code", accessor: "zipCode" },
-      { Header: "City", accessor: "city" },
-      { Header: "Phone Number", accessor: "phone" },
-    ],
-    [],
-  );
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
-    columns: columns as any, //TODO fix ts error
-    data: data?.pages.map(({ data }) => data).flat(1) || [],
-  });
 
   return (
     <div className="relative">

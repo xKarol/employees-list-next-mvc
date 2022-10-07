@@ -1,6 +1,7 @@
 import clsx from "clsx";
-import { useMemo } from "react";
-import { useQuery } from "react-query";
+import { useEffect, useMemo } from "react";
+import { useInView } from "react-intersection-observer";
+import { useInfiniteQuery } from "react-query";
 import { BeatLoader } from "react-spinners";
 import { useTable } from "react-table";
 
@@ -8,8 +9,20 @@ import type { EmployeeType } from "../@types";
 import { getEmployees } from "../services";
 
 const EmployeeTableContainer = () => {
-  const { data, isLoading, isError } = useQuery<EmployeeType[]>("get-employees", getEmployees);
-  console.log(data, isLoading, isError);
+  const { data, isLoading, isError, fetchNextPage, hasNextPage } = useInfiniteQuery<{
+    data: EmployeeType;
+    nextPage: number;
+  }>("get-employees", ({ pageParam: page }) => getEmployees({ page }), {
+    getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
+  });
+
+  const { ref, inView } = useInView({ threshold: 0 });
+
+  useEffect(() => {
+    if (inView) fetchNextPage();
+  }, [inView, fetchNextPage]);
+
+  console.log(isError);
 
   const columns = useMemo(
     () => [
@@ -26,7 +39,7 @@ const EmployeeTableContainer = () => {
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
     columns: columns as any, //TODO fix ts error
-    data: data || [],
+    data: data?.pages.map(({ data }) => data).flat(1) || [],
   });
 
   return (
@@ -68,6 +81,7 @@ const EmployeeTableContainer = () => {
             })}
           </tbody>
         </table>
+        <div ref={ref}>{hasNextPage ? "Load more..." : null}</div>
       </div>
     </div>
   );

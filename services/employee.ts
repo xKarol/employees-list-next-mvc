@@ -12,7 +12,8 @@ export const createEmployee = async (data: EmployeeType) => {
   });
 };
 
-export const getEmployees = async () => {
-  const { data } = await axios("http://localhost:3000/api/employees");
+export const getEmployees = async ({ page = 0, limit = 25 }: { page?: number; limit?: number }) => {
+  console.log({ page });
+  const { data } = await axios(`http://localhost:3000/api/employees?page=${page}&limit=${limit}`);
   return data;
 };

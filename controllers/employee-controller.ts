@@ -42,6 +42,13 @@ export const getEmployee = catchAsyncErrors(async (req: NextApiRequest, res: Nex
 });
 
 export const getEmployees = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
-  const employees = await prisma.employee.findMany();
-  return res.status(200).json(employees);
+  const { query } = req;
+  const { page = 0, limit = 25 } = query;
+
+  const employees = await prisma.employee.findMany({
+    skip: +page * +limit,
+    take: +limit,
+  });
+  const nextPage = employees.length ? +page + 1 : undefined;
+  return res.status(200).json({ data: employees, nextPage });
 });

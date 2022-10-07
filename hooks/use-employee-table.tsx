@@ -6,6 +6,7 @@ import { EmployeeType } from "../@types";
 const useEmployeeTable = (data: EmployeeType[] | undefined) => {
   const columns = useMemo(
     () => [
+      { Header: "#", accessor: (_: any, index: number) => index + 1 },
       { Header: "First Name", accessor: "firstName" },
       { Header: "Last Name", accessor: "lastName" },
       { Header: "Email", accessor: "email" },

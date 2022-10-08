@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import { BeatLoader } from "react-spinners";
 
+import { EmployeeTableStateBox } from "../components";
 import { useEmployeeTable, useEmployeeTableData } from "../hooks";
 
 const EmployeeTableContainer = () => {
@@ -12,7 +12,7 @@ const EmployeeTableContainer = () => {
     data?.pages.map(({ data }) => data).flat(1),
   );
   const { ref, inView } = useInView({ threshold: 0 });
-  const showLoader = (hasNextPage || isLoading) && !isError;
+  const showLoader = (hasNextPage || isLoading || isFetchingNextPage) && !isError;
 
   useEffect(() => {
     if (inView) fetchNextPage();
@@ -59,14 +59,7 @@ const EmployeeTableContainer = () => {
           </tbody>
         </table>
       </div>
-      {showLoader || isError ? (
-        <div ref={ref} className="flex flex-col py-10 items-center">
-          {showLoader ? <BeatLoader loading={isLoading || isFetchingNextPage} /> : null}
-          {isError ? (
-            <span className="text-sm text-red-500">{(error as Error).message}</span>
-          ) : null}
-        </div>
-      ) : null}
+      <EmployeeTableStateBox ref={ref} error={(error as Error)?.message} loading={showLoader} />
     </div>
   );
 };

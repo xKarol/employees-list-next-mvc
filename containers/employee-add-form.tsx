@@ -17,14 +17,15 @@ const EmployeeFormContainer = () => {
   } = useForm<EmployeeType>({
     resolver: yupResolver(employeeSchema),
   });
-  const { mutate, isLoading, isError, error } = useMutation(createEmployee, {
+  const { mutate, isLoading, isError, error, isSuccess } = useMutation(createEmployee, {
     onSuccess: () => reset(),
   });
-
   const onSubmit: SubmitHandler<EmployeeType> = (data) => mutate(data);
 
   return (
     <EmployeeForm onSubmit={handleSubmit(onSubmit)} error={isError ? (error as Error).message : ""}>
+      {isSuccess ? <span className="text-green-500 text-sm">Success!</span> : null}
+
       <div className="grid gap-6 mb-6 md:grid-cols-2">
         <Input label="First name" error={errors?.firstName?.message} {...register("firstName")} />
         <Input label="Last name" error={errors?.lastName?.message} {...register("lastName")} />

@@ -21,7 +21,9 @@ const EmployeeTableContainer = () => {
   return (
     <div className="relative">
       <div className={clsx(isLoading && "opacity-25")}>
-        <table {...getTableProps()} className="border-collapse table-fixed w-full text-sm">
+        <table
+          {...getTableProps()}
+          className="border-collapse table-fixed w-full text-sm overflow-auto min-w-[800px]">
           <thead>
             {headerGroups.map((headerGroup, index) => (
               <tr {...headerGroup.getHeaderGroupProps()} key={index}>
